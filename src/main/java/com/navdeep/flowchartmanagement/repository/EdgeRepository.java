@@ -9,4 +9,6 @@ import java.util.Collection;
 @Repository
 public interface EdgeRepository extends JpaRepository<Edge, Long> {
     Collection<Edge> findAllByFlowchartId(Long id);
+
+    Collection<Edge> findAllByFlowchartIdAndSource(Long flowcharId, String source);
 }

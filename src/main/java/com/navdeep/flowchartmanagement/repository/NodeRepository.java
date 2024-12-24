@@ -9,4 +9,6 @@ import java.util.Collection;
 @Repository
 public interface NodeRepository extends JpaRepository<Node, Long> {
     Collection<Node> findAllByFlowchartId(Long flowchartId);
+
+    boolean existsByNameAndFlowchartId(String name, Long flowchartId);
 }

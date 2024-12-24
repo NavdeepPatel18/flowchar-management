@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EdgeService {
@@ -100,6 +101,22 @@ public class EdgeService {
 
     public void deleteEdges(List<Edge> Edges) {
         edgeRepository.deleteAll(Edges);
+    }
+
+    public Optional<List<EdgeDTO>> outgoingEdgesFroNode(Long flowcharId, String source){
+        return Optional.of(edgeRepository.findAllByFlowchartIdAndSource(flowcharId, source).stream()
+                .map(
+                        edge -> {
+                            new EdgeDTO();
+                            return EdgeDTO.builder()
+                                    .id(edge.getId())
+                                    .source(edge.getSource())
+                                    .target(edge.getTarget())
+                                    .createdAt(edge.getCreatedAt())
+                                    .updatedAt(edge.getUpdatedAt())
+                                    .build();
+                        }
+                ).toList());
     }
 
 }

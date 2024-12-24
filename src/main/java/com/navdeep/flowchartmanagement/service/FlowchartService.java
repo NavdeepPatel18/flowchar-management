@@ -111,4 +111,27 @@ public class FlowchartService {
         }
         return false;
     }
+
+    public boolean validateFlowchart(Long flowchartId) {
+        Flowchart flowchart = flowchartRepository.findById(flowchartId)
+                .orElseThrow(() -> new RuntimeException("Flowchart not found with id: " + flowchartId));
+
+        List<Node> nodes = flowchart.getNodes();
+        List<Edge> edges = flowchart.getEdges();
+
+        // Validate that all nodes are referenced by edges
+        Set<String> nodeIds = new HashSet<>();
+        for (Node node : nodes) {
+            nodeIds.add(node.getName());
+        }
+
+        // Check if all edges reference valid nodes
+        for (Edge edge : edges) {
+            if (!nodeIds.contains(edge.getSource()) || !nodeIds.contains(edge.getTarget())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

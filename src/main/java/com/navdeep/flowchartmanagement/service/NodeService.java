@@ -99,5 +99,9 @@ public class NodeService {
         nodeRepository.deleteAll(nodesToBeDeleted);
     }
 
+    public boolean findNodeByNameAndFlowchartId(String name, Long flowchartId) {
+        return nodeRepository.existsByNameAndFlowchartId(name, flowchartId);
+    }
+
 
 }
