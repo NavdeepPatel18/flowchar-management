@@ -6,6 +6,7 @@ import com.navdeep.flowchartmanagement.dto.FlowchartRequest;
 import com.navdeep.flowchartmanagement.entity.Flowchart;
 import com.navdeep.flowchartmanagement.service.EdgeService;
 import com.navdeep.flowchartmanagement.service.FlowchartService;
+import com.navdeep.flowchartmanagement.service.NodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,8 @@ public class FlowchartController {
     private EdgeService service;
     @Autowired
     private EdgeService edgeService;
+    @Autowired
+    private NodeService nodeService;
 
     @PostMapping
     public ResponseEntity<String> createFlowchart(@RequestBody FlowchartRequest flowchartRequest) {
@@ -79,6 +82,15 @@ public class FlowchartController {
             return ResponseEntity.ok(outgoingEdges.get());
         } else {
             return ResponseEntity.status(404).body("Flowchart not found");
+        }
+    }
+
+    @GetMapping("/{id}/connectivity/{node}")
+    public ResponseEntity<String> checkConnectivity(@PathVariable Long id, @PathVariable String node) {
+        if (nodeService.areAllNodesConnected(id, node)) {
+            return ResponseEntity.ok("Node is connected");
+        } else {
+            return ResponseEntity.status(400).body("Node is not connected");
         }
     }
 
